@@ -1,0 +1,64 @@
+def generate_vigenere_table():
+    letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    table = []
+    for i in range(len(letters)):
+        row = letters[i:] + letters[:i]
+        table.append(row)
+    return table
+
+def encrypt_vigenere(plain_text, key):
+    table = generate_vigenere_table()
+    plain_text = plain_text.upper()
+    key = key.upper()
+    
+    encrypted_text = ""
+    key_index = 0
+
+    for char in plain_text:
+        if char.isalpha():
+            row = ord(key[key_index % len(key)]) - ord('A')
+            col = ord(char) - ord('A')
+            encrypted_text += table[row][col]
+            key_index += 1
+        else:
+            encrypted_text += char
+    
+    return encrypted_text
+
+def decrypt_vigenere(cipher_text, key):
+    table = generate_vigenere_table()
+    cipher_text = cipher_text.upper()
+    key = key.upper()
+    
+    decrypted_text = ""
+    key_index = 0
+
+    for char in cipher_text:
+        if char.isalpha():
+            row = ord(key[key_index % len(key)]) - ord('A')
+            col = table[row].index(char)
+            decrypted_text += chr(col + ord('A'))
+            key_index += 1
+        else:
+            decrypted_text += char
+    
+    return decrypted_text
+
+def main():
+    choice = input("Enter 'E' to encrypt or 'D' to decrypt: ").strip().upper()
+    if choice == 'E':
+        plain_text = input("Enter the plain text: ").strip()
+        key = input("Enter the key: ").strip()
+        encrypted_text = encrypt_vigenere(plain_text, key)
+        print("Encrypted text:", encrypted_text)
+    elif choice == 'D':
+        cipher_text = input("Enter the cipher text: ").strip()
+        key = input("Enter the key: ").strip()
+        decrypted_text = decrypt_vigenere(cipher_text, key)
+        print("Decrypted text:", decrypted_text)
+    else:
+        print("Invalid choice. Please enter 'E' to encrypt or 'D' to decrypt.")
+        print("192210299:")
+
+if __name__ == "__main__":
+    main()
